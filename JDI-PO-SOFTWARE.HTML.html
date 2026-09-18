@@ -1,0 +1,2340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>Jai Durga Industry - Pipe PO Pro</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --primary-navy: #07192f;
+      --primary-blue: #0f3460;
+      --accent-cyan: #0284c7;
+      --accent-gold: #f59e0b;
+      --urgent-red: #e11d48;
+      --success-green: #16a34a;
+      --app-bg: #070e1e;
+      --wa-green: #25d366;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--app-bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(15, 52, 96, 0.45) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(2, 132, 199, 0.25) 0px, transparent 50%);
+      color: #1e293b;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      padding: 14px 10px;
+      padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    }
+
+    @media (min-width: 1025px) {
+      body { padding: 16px 14px; }
+    }
+
+    .main-wrapper {
+      max-width: 1680px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 530px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1100px) {
+      .main-wrapper {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* Left Control Sidebar */
+    .control-sidebar {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.5);
+      height: fit-content;
+    }
+
+    @media (min-width: 1101px) {
+      .control-sidebar {
+        max-height: 94vh;
+        overflow-y: auto;
+      }
+    }
+
+    .control-sidebar::-webkit-scrollbar { width: 5px; }
+    .control-sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+    .app-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 14px;
+    }
+
+    .app-brand {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--primary-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-iso-top {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* Sidebar Navigation Tabs */
+    .sidebar-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      padding: 10px 4px;
+      border: none;
+      background: transparent;
+      border-radius: 7px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s;
+      text-align: center;
+      min-height: 38px;
+    }
+    .tab-btn.active {
+      background: #ffffff;
+      color: var(--primary-navy);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .form-sec-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #475569;
+      margin: 14px 0 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-group { margin-bottom: 10px; }
+    .form-group label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      color: #0f172a;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    @media (max-width: 768px) {
+      .form-control {
+        font-size: 16px !important;
+        padding: 10px 10px;
+      }
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: #0284c7;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+    @media (max-width: 580px) {
+      .grid-2 { grid-template-columns: 1fr; gap: 8px; }
+      .grid-4 { grid-template-columns: 1fr 1fr; gap: 8px; }
+    }
+
+    /* Supplier Directory Card */
+    .supplier-card-box {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1.5px solid #7dd3fc;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .supplier-action-btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .btn-sup-action {
+      padding: 8px 6px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      border-radius: 7px;
+      cursor: pointer;
+      border: none;
+      min-height: 36px;
+    }
+    .btn-sup-save { background: #0284c7; color: #ffffff; }
+    .btn-sup-del { background: #fee2e2; color: #991b1b; }
+    .btn-sup-new { background: #dcfce7; color: #166534; }
+
+    /* Email Dispatch Section */
+    .dispatch-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 14px;
+    }
+
+    .mail-portal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-mail-action {
+      padding: 10px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #ffffff;
+      color: #0f172a;
+      min-height: 42px;
+    }
+    .btn-mail-jdi {
+      background: linear-gradient(135deg, #07192f 0%, #0f3460 100%);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Saved PO List Panel */
+    #savedPoPanel, #inwardPanel { display: none; }
+    .po-list-scroll {
+      max-height: 70vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .po-history-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .po-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .po-card-num { font-weight: 800; color: #07192f; font-size: 0.85rem; }
+    .po-card-date { font-size: 0.7rem; color: #64748b; font-weight: 600; }
+    .po-card-supp { font-size: 0.77rem; font-weight: 700; color: #0369a1; margin-bottom: 6px; }
+
+    .po-card-summary {
+      font-size: 0.72rem;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding-top: 5px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .po-card-btns {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1.1fr 0.9fr;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 480px) {
+      .po-card-btns { grid-template-columns: 1fr 1fr; }
+    }
+
+    .btn-po-action {
+      padding: 8px 4px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      min-height: 36px;
+    }
+    .btn-po-review { background: #dcfce7; color: #166534; }
+    .btn-po-load { background: #e0f2fe; color: #0369a1; }
+    .btn-po-clone { background: #fef3c7; color: #92400e; }
+    .btn-po-del { background: #fee2e2; color: #991b1b; }
+
+    .btn-report-action {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 9px 10px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    @media (max-width: 480px) {
+      .actions-grid { grid-template-columns: 1fr; }
+    }
+
+    .btn-cta {
+      padding: 12px 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+    }
+    .btn-whatsapp { background: #22c55e; color: #ffffff; }
+    .btn-pdf-preview { background: #d97706; color: #ffffff; }
+    .btn-pdf-print { background: #0284c7; color: #ffffff; }
+    .btn-save-record { background: #4f46e5; color: #ffffff; width: 100%; margin-top: 10px; }
+
+    /* Pipe Item Builder */
+    .pipe-item-builder {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .pipe-item-builder.is-urgent { border-color: #fca5a5; background: #fff5f5; }
+
+    .urgent-toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fee2e2;
+      color: #be123c;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-del-item {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-add-pipe {
+      width: 100%;
+      padding: 12px;
+      background: #f8fafc;
+      color: #0369a1;
+      border: 2px dashed #93c5fd;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 6px;
+      min-height: 44px;
+    }
+
+    /* Right Printable Preview */
+    .preview-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .po-sheet {
+      width: 100%;
+      min-width: 780px;
+      max-width: 890px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+      color: #0f172a;
+      overflow: hidden;
+    }
+
+    .top-color-bar {
+      height: 7px;
+      background: linear-gradient(90deg, #f59e0b 0%, #0284c7 28%, #1e3a8a 65%, #e11d48 100%);
+    }
+
+    .po-header-hero {
+      background: linear-gradient(135deg, #07192f 0%, #0f3460 60%, #1e40af 100%);
+      padding: 22px 26px;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 16px;
+      align-items: center;
+      border-bottom: 3.5px solid #f59e0b;
+    }
+
+    .hero-company-name { font-size: 1.85rem; font-weight: 900; line-height: 1.05; }
+    .hero-tagline { font-size: 0.78rem; font-weight: 800; color: #f59e0b; margin-bottom: 6px; }
+    .hero-contact-info { font-size: 0.7rem; color: #e2e8f0; line-height: 1.4; }
+
+    .hero-iso-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      text-align: right;
+    }
+
+    .po-content-body { padding: 20px 24px; }
+
+    .metadata-deck {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .deck-card { border-radius: 10px; padding: 12px 14px; border: 1px solid #cbd5e1; }
+    .deck-card-supplier { background: #f0f9ff; border-left: 5px solid #0284c7; }
+    .deck-card-order { background: #fffbeb; border-left: 5px solid #f59e0b; }
+
+    .deck-title {
+      font-size: 0.7rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      padding-bottom: 2px;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    .deck-row { display: flex; font-size: 0.77rem; margin-bottom: 3px; }
+    .deck-row .prop { width: 110px; font-weight: 600; color: #64748b; }
+    .deck-row .val { font-weight: 700; color: #0f172a; word-break: break-all; }
+
+    .po-table-container {
+      border-radius: 10px;
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      margin-bottom: 14px;
+    }
+
+    .po-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+    .po-table thead th {
+      background: #07192f;
+      color: #ffffff;
+      padding: 9px 7px;
+      font-size: 0.69rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .po-table tbody td { padding: 8px 7px; border-bottom: 1px solid #e2e8f0; }
+    .is-urgent-row { background: #fff1f2 !important; border-left: 5px solid #e11d48 !important; }
+    .font-mono-bold { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+    .summary-deck {
+      display: grid;
+      grid-template-columns: 1.1fr 1.2fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .totals-card {
+      background: #dcfce7;
+      border: 1.5px solid #86efac;
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .total-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #166534;
+      font-weight: 600;
+    }
+    .total-line.sub {
+      color: #0f172a;
+      border-top: 1px dashed #86efac;
+      padding-top: 4px;
+    }
+    .total-line.grand {
+      border-top: 2px solid #15803d;
+      padding-top: 6px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #07192f;
+    }
+
+    .rate-pill {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Modal Styles */
+    .app-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(7, 14, 30, 0.82);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-modal-container {
+      background: #ffffff;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 960px;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+    }
+
+    .modal-header-bar {
+      background: #07192f;
+      color: #ffffff;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #0284c7;
+    }
+
+    .modal-header-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-btn-close {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+      padding: 14px;
+      background: #f8fafc;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-action-footer {
+      padding: 12px 16px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .report-sheet {
+      width: 100%;
+      min-width: 680px;
+      max-width: 880px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border: 1px solid #cbd5e1;
+      padding: 20px 24px;
+    }
+
+    .report-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .badge-full { background: #dcfce7; color: #166534; }
+    .badge-partial { background: #fef3c7; color: #92400e; }
+    .badge-pending { background: #fee2e2; color: #991b1b; }
+    .badge-excess { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
+
+    /* Mobile dual-view bar */
+    .mobile-view-nav-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1.5px solid #cbd5e1;
+      padding: 8px 14px calc(8px + env(safe-area-inset-bottom)) 14px;
+      z-index: 9999;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mobile-nav-btn {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .mobile-nav-btn.active {
+      background: var(--primary-navy);
+      color: #ffffff;
+      border-color: var(--primary-navy);
+    }
+
+    @media (max-width: 1100px) {
+      .mobile-view-nav-bar { display: grid; }
+      .preview-wrapper.is-hidden-mobile { display: none !important; }
+      .control-sidebar.is-hidden-mobile { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+
+  <!-- Left Sidebar Controls -->
+  <div class="control-sidebar" id="sidebarContainer">
+    <div class="app-title-bar">
+      <div class="app-brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#07192f" stroke-width="2.3"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        PO Maker Pro
+      </div>
+      <span class="badge-iso-top">ISO 9001:2015</span>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="sidebar-tabs">
+      <button class="tab-btn active" id="tabEditorBtn" onclick="switchSidebarTab('editor')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        PO Editor
+      </button>
+      <button class="tab-btn" id="tabInwardBtn" onclick="switchSidebarTab('inward')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Inward Entry
+      </button>
+      <button class="tab-btn" id="tabListBtn" onclick="switchSidebarTab('list')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+        PO Archive (<span id="savedPoCount">0</span>)
+      </button>
+    </div>
+
+    <!-- TAB 1: PO EDITOR -->
+    <div id="editorPanel">
+      <div class="form-sec-title">
+        Order Information & Pricing
+        <button type="button" onclick="assignNextSequentialPoNo()" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; border-radius:4px; font-size:0.68rem; font-weight:800; padding:4px 8px; cursor:pointer;">
+          + Next Srl
+        </button>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>PO Serial Number</label>
+          <input type="text" id="poNumber" class="form-control font-mono-bold nav-enter" value="JDI-PO-001">
+        </div>
+        <div class="form-group">
+          <label>PO Date</label>
+          <input type="date" id="poDate" class="form-control nav-enter">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Dispatch Due Date</label>
+          <input type="date" id="poDueDate" class="form-control nav-enter">
+        </div>
+        <div class="form-group">
+          <label>Payment Terms</label>
+          <input type="text" id="paymentTerms" class="form-control nav-enter" value="30 Days Against Delivery">
+        </div>
+      </div>
+
+      <!-- Single Global Booking Rate Field -->
+      <div class="form-group" style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 9px; padding: 10px;">
+        <label style="color: #92400e; font-weight: 800; display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px;">
+          <span>Booking Rate (INR ₹ / Kg)</span>
+          <span style="font-size:0.68rem; color:#b45309;">Auto Amount & 18% GST</span>
+        </label>
+        <div style="position:relative; margin-top:4px;">
+          <span style="position:absolute; left:10px; top:8px; font-weight:800; color:#475569;">₹</span>
+          <input type="number" step="0.5" id="bookingRateKg" class="form-control font-mono-bold nav-enter" style="padding-left:28px; font-size:0.95rem; font-weight:800; color:#07192f;" value="68.50" placeholder="e.g. 68.50">
+        </div>
+      </div>
+
+      <!-- Supplier Directory Section -->
+      <div class="form-sec-title">Supplier Master Directory</div>
+      <div class="supplier-card-box">
+        <div class="form-group">
+          <label>Saved Suppliers</label>
+          <select id="supplierDirectorySelect" class="form-control nav-enter" onchange="onSelectSavedSupplier()">
+            <option value="">-- Choose / Manage Supplier --</option>
+          </select>
+        </div>
+
+        <div class="supplier-action-btn-row">
+          <button type="button" class="btn-sup-action btn-sup-save" onclick="saveOrUpdateSupplier()">Save / Update</button>
+          <button type="button" class="btn-sup-action btn-sup-del" onclick="deleteSelectedSupplier()">Delete</button>
+          <button type="button" class="btn-sup-action btn-sup-new" onclick="clearSupplierFields()">+ New</button>
+        </div>
+
+        <div class="form-group">
+          <label>Supplier / Mill Name</label>
+          <input type="text" id="suppName" class="form-control nav-enter" value="Apollo Tubes & Pipe Mills Ltd." oninput="updateLivePO()">
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Supplier Mobile (WhatsApp)</label>
+            <input type="tel" id="suppPhone" class="form-control font-mono-bold nav-enter" placeholder="e.g. 9876543210" value="9876543210" oninput="updateLivePO()">
+          </div>
+          <div class="form-group">
+            <label>Supplier Email ID</label>
+            <input type="email" id="suppEmail" class="form-control nav-enter" placeholder="sales@mill.com" value="sales@apollotubes.com" oninput="updateLivePO()">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Location / City</label>
+            <input type="text" id="suppLocation" class="form-control nav-enter" value="Mandi Gobindgarh, Punjab" oninput="updateLivePO()">
+          </div>
+          <div class="form-group">
+            <label>GSTIN Number</label>
+            <input type="text" id="suppGst" class="form-control nav-enter" value="03AAACB1234F1Z5" oninput="updateLivePO()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Direct Email Dispatcher Section -->
+      <div class="dispatch-box">
+        <div style="font-size:0.75rem; font-weight:800; color:#07192f;">
+          Direct Email Dispatch (Pre-filled Mail)
+        </div>
+        <div class="mail-portal-grid">
+          <button type="button" class="btn-mail-action btn-mail-jdi" onclick="dispatchViaEmail('jdi_webmail')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            JDI Webmail
+          </button>
+          <button type="button" class="btn-mail-action" onclick="dispatchViaEmail('gmail')">
+            <span style="color:#ea4335; font-weight:900;">G</span>mail
+          </button>
+          <button type="button" class="btn-mail-action" onclick="dispatchViaEmail('yahoo')">
+            <span style="color:#6001d2; font-weight:900;">Y!</span> Yahoo
+          </button>
+          <button type="button" class="btn-mail-action" onclick="dispatchViaEmail('default')">
+            Default Mail
+          </button>
+        </div>
+      </div>
+
+      <!-- Pipe Specifications Builder -->
+      <div class="form-sec-title">
+        <span>Pipe Specifications</span>
+        <span style="font-size:0.67rem; color:#0284c7; font-weight:700;">(Press Enter in Qty to Auto-Add Row)</span>
+      </div>
+      <div id="pipeItemsList"></div>
+
+      <button type="button" class="btn-add-pipe" onclick="addNewPipeItem()">
+        + Add Another Pipe Specification
+      </button>
+
+      <button type="button" class="btn-cta btn-save-record" onclick="saveCurrentPOToSystem(true, true)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+        Save Current PO & Preview PDF
+      </button>
+
+      <div class="actions-grid">
+        <button type="button" class="btn-cta btn-pdf-preview" onclick="openPdfPreviewModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          PDF Preview
+        </button>
+        <button type="button" class="btn-cta btn-pdf-print" onclick="downloadOfficialPdf()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </button>
+        <button type="button" class="btn-cta btn-whatsapp" onclick="shareToWhatsAppWithPdfDownload()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 2: MATERIAL INWARD & PENDING TRACKER (Supports Excess Receiving) -->
+    <div id="inwardPanel">
+      <div class="form-sec-title">
+        Material Inward Management
+        <span style="font-size:0.68rem; color:#16a34a; font-weight:800;">Real-time Pending & Excess</span>
+      </div>
+      <div class="form-group">
+        <label>Select Purchase Order (PO No.)</label>
+        <select id="inwardPoSelect" class="form-control nav-enter" onchange="onSelectInwardPo()">
+          <option value="">-- Choose PO to enter received material --</option>
+        </select>
+      </div>
+
+      <div id="inwardPoDetailsCard" style="display:none; background:#f0f9ff; border:1.5px solid #7dd3fc; border-radius:10px; padding:12px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-weight:900; color:#07192f; font-size:0.85rem;" id="inwardCardPoNo">-</span>
+          <span style="font-size:0.72rem; font-weight:700; color:#0369a1;" id="inwardCardDate">-</span>
+        </div>
+        <div style="font-size:0.76rem; font-weight:700; color:#334155; margin-bottom:8px;" id="inwardCardSupplier">-</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; background:#ffffff; padding:8px; border-radius:8px; border:1px solid #cbd5e1; text-align:center; font-size:0.72rem;">
+          <div><div style="color:#64748b;">Ordered</div><strong id="inwardTotalOrderedPcs">0 Pcs</strong></div>
+          <div><div style="color:#0284c7;">Received</div><strong id="inwardTotalReceivedPcs" style="color:#0284c7;">0 Pcs</strong></div>
+          <div><div style="color:#dc2626;">Pending / Excess</div><strong id="inwardTotalPendingPcs" style="color:#dc2626;">0 Pcs</strong></div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button type="button" class="btn-report-action" onclick="generateAndOpenPoReport()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Generate Received vs Pending PDF Report
+          </button>
+        </div>
+      </div>
+
+      <div id="inwardItemsContainer" style="display:flex; flex-direction:column; gap:10px;">
+        <div style="text-align:center; padding:30px; font-size:0.8rem; color:#94a3b8;">
+          Kripya upar se PO number select karein.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: SAVED PO ARCHIVE -->
+    <div id="savedPoPanel">
+      <div class="form-group">
+        <input type="text" id="poSearchInput" class="form-control nav-enter" placeholder="Search by PO #, Supplier..." oninput="filterSavedPoList()">
+      </div>
+      <div class="po-list-scroll" id="savedPoContainer"></div>
+    </div>
+
+  </div>
+
+  <!-- Right Printable Preview -->
+  <div class="preview-wrapper" id="previewContainer">
+    <div class="po-sheet" id="printablePoSheet">
+      <div class="top-color-bar"></div>
+
+      <!-- Header Hero -->
+      <div class="po-header-hero">
+        <div>
+          <div class="hero-company-name">JAI DURGA INDUSTRY</div>
+          <div class="hero-tagline">Manufacturer of Bicycle Frames, Forks & Carriers</div>
+          <div class="hero-contact-info">
+            <strong>Works:</strong> Jaspal Bangar Industrial Area-C, Ludhiana - 141122, Punjab, INDIA<br>
+            <strong>GSTIN:</strong> 03BYIPM8101R1Z2 &bull; <strong>Website:</strong> www.jaidurgaindustry.com<br>
+            <strong>Email:</strong> Lalit@jaidurgaindustry.com &bull; info@jaidurgaindustry.com
+          </div>
+        </div>
+
+        <div class="hero-iso-card">
+          <div style="font-size:1.45rem; font-weight:900; line-height:1.1;">PURCHASE ORDER</div>
+          <div style="font-size:0.75rem; font-weight:800; color:#f59e0b; margin-top:4px;">ISO 9001:2015 CERTIFIED</div>
+        </div>
+      </div>
+
+      <!-- PO Body -->
+      <div class="po-content-body">
+        <div class="metadata-deck">
+          <div class="deck-card deck-card-supplier">
+            <div class="deck-title" style="color:#0284c7;">Vendor Details</div>
+            <div class="deck-row">
+              <span class="prop">M/s:</span>
+              <span class="val" id="prevSuppName">-</span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">Mobile / Tel:</span>
+              <span class="val font-mono-bold" id="prevSuppPhone">-</span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">Email:</span>
+              <span class="val" id="prevSuppEmail">-</span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">Address & GST:</span>
+              <span class="val" id="prevSuppLocGst">-</span>
+            </div>
+          </div>
+
+          <div class="deck-card deck-card-order">
+            <div class="deck-title" style="color:#d97706;">Order Details</div>
+            <div class="deck-row">
+              <span class="prop">PO Number:</span>
+              <span class="val font-mono-bold" id="prevPoNumber">-</span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">PO Date:</span>
+              <span class="val" id="prevPoDate">-</span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">Dispatch Due:</span>
+              <span class="val" id="prevPoDueDate">-</span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">Booking Rate:</span>
+              <span class="val"><span class="rate-pill" id="prevBookingRateDisplay">₹ 0.00 / Kg</span></span>
+            </div>
+            <div class="deck-row">
+              <span class="prop">Payment Terms:</span>
+              <span class="val" id="prevPaymentTerms">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipe Table -->
+        <div class="po-table-container">
+          <table class="po-table">
+            <thead>
+              <tr>
+                <th style="width: 30px; text-align:center;">#</th>
+                <th>Classification & Pipe Item</th>
+                <th style="text-align:center; width:65px;">OD (mm)</th>
+                <th style="text-align:center; width:65px;">Thk (mm)</th>
+                <th style="text-align:center; width:75px;">Length (mm)</th>
+                <th style="text-align:right; width:75px;">Qty (Pcs)</th>
+                <th style="text-align:right; width:85px;">Weight (Kg)</th>
+                <th style="text-align:right; width:95px;">Amount (INR)</th>
+                <th style="text-align:center; width:70px;">Priority</th>
+              </tr>
+            </thead>
+            <tbody id="previewTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Totals Deck with 18% GST -->
+        <div class="summary-deck">
+          <div style="font-size:0.7rem; color:#475569; padding:6px;">
+            <strong>Quality & Commercial Terms:</strong><br>
+            • CR / ERW Steel Pipes conforming to ISO 4210 standards. Deburred square cut ends, perfectly straight tubes with Mill Test Certificate.<br>
+            • Rates booked in INR (₹) based on verified weight. GST charged @ 18% (9% CGST + 9% SGST).
+          </div>
+
+          <div class="totals-card">
+            <div class="total-line">
+              <span>Total Quantity (Pcs):</span>
+              <span class="font-mono-bold" id="prevTotalPcs">0 Pcs</span>
+            </div>
+            <div class="total-line">
+              <span>Total Weight (Kg):</span>
+              <span class="font-mono-bold" id="prevTotalWeight">0.00 Kg</span>
+            </div>
+            <div class="total-line sub">
+              <span>Gross Amount:</span>
+              <span class="font-mono-bold" id="prevGrossAmount">₹ 0.00</span>
+            </div>
+            <div class="total-line">
+              <span>CGST (9%):</span>
+              <span class="font-mono-bold" id="prevCgstAmount">₹ 0.00</span>
+            </div>
+            <div class="total-line">
+              <span>SGST (9%):</span>
+              <span class="font-mono-bold" id="prevSgstAmount">₹ 0.00</span>
+            </div>
+            <div class="total-line" style="font-size:0.75rem; color:#1e3a8a;">
+              <span>Total GST (18%):</span>
+              <span class="font-mono-bold" id="prevTotalGstAmount">₹ 0.00</span>
+            </div>
+            <div class="total-line grand">
+              <span>Net Grand Total (INR):</span>
+              <span class="font-mono-bold" id="prevNetAmount">₹ 0.00</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM TOGGLE BAR FOR MOBILE / SMALL SCREENS -->
+<div class="mobile-view-nav-bar" id="mobileBottomNav">
+  <button type="button" class="mobile-nav-btn active" id="btnMobileForm" onclick="switchMobileView('form')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Edit & Controls
+  </button>
+  <button type="button" class="mobile-nav-btn" id="btnMobilePreview" onclick="switchMobileView('preview')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Live PO Sheet
+  </button>
+</div>
+
+<!-- MODAL 1: PDF PREVIEW MODAL -->
+<div class="app-modal-overlay" id="pdfPreviewModal">
+  <div class="app-modal-container">
+    <div class="modal-header-bar">
+      <div class="modal-header-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Official Purchase Order - PDF Preview</span>
+      </div>
+      <button type="button" class="modal-btn-close" onclick="closePdfPreviewModal()">&times;</button>
+    </div>
+
+    <div class="modal-content-scroll" id="pdfModalContentScroll">
+      <div id="modalSheetCloneContainer" style="display:flex; justify-content:center; overflow-x:auto;"></div>
+    </div>
+
+    <div class="modal-action-footer">
+      <button type="button" class="btn-cta" style="background:#e2e8f0; color:#334155; padding:8px 14px;" onclick="closePdfPreviewModal()">
+        Close
+      </button>
+      <button type="button" class="btn-cta btn-whatsapp" style="padding:8px 14px;" onclick="shareToWhatsAppWithPdfDownload()">
+        Send via WhatsApp
+      </button>
+      <button type="button" class="btn-cta btn-pdf-print" style="padding:8px 16px;" onclick="downloadOfficialPdf()">
+        Download PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: MATERIAL BALANCE REPORT MODAL (WITH COMPLETE EXCESS RECEIVING DETAILS) -->
+<div class="app-modal-overlay" id="poReportModal">
+  <div class="app-modal-container" style="max-width: 990px;">
+    <div class="modal-header-bar">
+      <div class="modal-header-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+        <span>Material Inward, Pending & Excess Balance Report</span>
+      </div>
+      <button type="button" class="modal-btn-close" onclick="closePoReportModal()">&times;</button>
+    </div>
+
+    <div class="modal-content-scroll">
+      <div class="report-sheet" id="printableReportSheet">
+        <div style="border-bottom: 2.5px solid #07192f; padding-bottom: 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <div style="font-size: 1.35rem; font-weight: 900; color: #07192f;">JAI DURGA INDUSTRY</div>
+            <div style="font-size: 0.72rem; font-weight: 800; color: #0284c7;">Manufacturer of Bicycle Frames, Forks & High-Tensile Parts</div>
+            <div style="font-size: 0.68rem; color: #475569; margin-top: 3px;">Works: Jaspal Bangar Industrial Area-C, Ludhiana - 141122, Punjab | GSTIN: 03BYIPM8101R1Z2</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="background: #07192f; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-block;">
+              MATERIAL BALANCE REPORT
+            </div>
+            <div style="font-size: 0.68rem; color: #64748b; font-weight: 700; margin-top: 4px;" id="repReportGenDate">Date: -</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+          <div style="font-size: 0.74rem;">
+            <div><span style="color:#64748b;">PO Number:</span> <strong id="repPoNumber" class="font-mono-bold">-</strong></div>
+            <div style="margin-top:2px;"><span style="color:#64748b;">Supplier:</span> <strong id="repSupplierName">-</strong></div>
+          </div>
+          <div style="font-size: 0.74rem; text-align: right;">
+            <div><span style="color:#64748b;">PO Date:</span> <strong id="repPoDate">-</strong></div>
+            <div style="margin-top:2px;"><span style="color:#64748b;">Rate:</span> <strong id="repBookingRate" class="font-mono-bold">₹ 0.00 / Kg</strong></div>
+          </div>
+        </div>
+
+        <!-- 4 Stat Summary Cards -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
+          <div style="background: #f1f5f9; border-radius: 8px; padding: 8px; text-align: center; border: 1px solid #cbd5e1;">
+            <div style="font-size: 0.65rem; color: #475569; font-weight: 700;">TOTAL ORDERED</div>
+            <div style="font-size: 0.92rem; font-weight: 900; color: #07192f;" id="repCardOrdered">0 Pcs</div>
+            <div style="font-size: 0.67rem; color: #64748b;" id="repCardOrderedWt">0.00 Kg</div>
+          </div>
+          <div style="background: #dcfce7; border-radius: 8px; padding: 8px; text-align: center; border: 1px solid #86efac;">
+            <div style="font-size: 0.65rem; color: #166534; font-weight: 700;">TOTAL RECEIVED</div>
+            <div style="font-size: 0.92rem; font-weight: 900; color: #15803d;" id="repCardReceived">0 Pcs</div>
+            <div style="font-size: 0.67rem; color: #166534;" id="repCardReceivedWt">0.00 Kg</div>
+          </div>
+          <div style="background: #fee2e2; border-radius: 8px; padding: 8px; text-align: center; border: 1px solid #fca5a5;">
+            <div style="font-size: 0.65rem; color: #991b1b; font-weight: 700;">TOTAL PENDING</div>
+            <div style="font-size: 0.92rem; font-weight: 900; color: #b91c1c;" id="repCardPending">0 Pcs</div>
+            <div style="font-size: 0.67rem; color: #991b1b;" id="repCardPendingWt">0.00 Kg</div>
+          </div>
+          <div style="background: #f5f3ff; border-radius: 8px; padding: 8px; text-align: center; border: 1px solid #ddd6fe;">
+            <div style="font-size: 0.65rem; color: #6d28d9; font-weight: 700;">TOTAL EXCESS</div>
+            <div style="font-size: 0.92rem; font-weight: 900; color: #6d28d9;" id="repCardExcess">0 Pcs</div>
+            <div style="font-size: 0.67rem; color: #7c3aed;" id="repCardExcessWt">0.00 Kg</div>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 18px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.72rem; border: 1px solid #cbd5e1; min-width: 650px;">
+            <thead>
+              <tr style="background: #07192f; color: #ffffff;">
+                <th style="padding: 7px 4px; text-align: center; width: 28px;">#</th>
+                <th style="padding: 7px 6px; text-align: left;">Description</th>
+                <th style="padding: 7px 4px; text-align: center;">OD (mm)</th>
+                <th style="padding: 7px 4px; text-align: center;">Thk (mm)</th>
+                <th style="padding: 7px 4px; text-align: center;">Len (mm)</th>
+                <th style="padding: 7px 4px; text-align: right; background: #1e293b;">Order Qty</th>
+                <th style="padding: 7px 4px; text-align: right; background: #065f46;">Recv Qty</th>
+                <th style="padding: 7px 4px; text-align: right; background: #991b1b;">Pending Qty</th>
+                <th style="padding: 7px 4px; text-align: right; background: #5b21b6; color:#ffffff;">Excess Qty</th>
+                <th style="padding: 7px 4px; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="repBreakdownTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- 3-Column List: Received, Pending Shortage, and Excess Received -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px; overflow-x:auto;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #166534; margin-bottom: 6px;">RECEIVED MATERIAL DETAILS</div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.68rem; min-width:240px;">
+              <thead>
+                <tr style="border-bottom: 1px solid #86efac; color: #166534;">
+                  <th style="text-align: left; padding: 4px 2px;">Item Size</th>
+                  <th style="text-align: right; padding: 4px 2px;">Recv Pcs</th>
+                  <th style="text-align: right; padding: 4px 2px;">Recv Wt (Kg)</th>
+                </tr>
+              </thead>
+              <tbody id="repReceivedListBody"></tbody>
+            </table>
+          </div>
+
+          <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; padding: 10px; overflow-x:auto;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #be123c; margin-bottom: 6px;">PENDING / SHORTAGE BALANCE</div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.68rem; min-width:240px;">
+              <thead>
+                <tr style="border-bottom: 1px solid #fca5a5; color: #be123c;">
+                  <th style="text-align: left; padding: 4px 2px;">Item Size</th>
+                  <th style="text-align: right; padding: 4px 2px;">Pending Pcs</th>
+                  <th style="text-align: right; padding: 4px 2px;">Pending Wt (Kg)</th>
+                </tr>
+              </thead>
+              <tbody id="repPendingListBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="repExcessBoxContainer" style="display:none; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; padding: 10px; overflow-x:auto;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #6d28d9; margin-bottom: 6px;">
+            &#9888; OVER-SUPPLY / EXCESS RECEIVED DETAILS (Above PO Quantity)
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.68rem; min-width:280px;">
+            <thead>
+              <tr style="border-bottom: 1px solid #c4b5fd; color: #6d28d9;">
+                <th style="text-align: left; padding: 4px 2px;">Pipe Size</th>
+                <th style="text-align: right; padding: 4px 2px;">Ordered</th>
+                <th style="text-align: right; padding: 4px 2px;">Total Received</th>
+                <th style="text-align: right; padding: 4px 2px;">Excess (+ Pcs)</th>
+                <th style="text-align: right; padding: 4px 2px;">Excess (+ Kg)</th>
+              </tr>
+            </thead>
+            <tbody id="repExcessListBody"></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 14px; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 0.7rem; color: #64748b;">
+          <div>Automated Report by Jai Durga Industry.</div>
+          <div style="font-weight: 800; color: #07192f; text-align: right;">
+            For Jai Durga Industry<br><br><br>Authorized Signatory
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-action-footer">
+      <button type="button" class="btn-cta" style="background:#e2e8f0; color:#334155; padding:8px 14px;" onclick="closePoReportModal()">
+        Close
+      </button>
+      <button type="button" class="btn-cta btn-pdf-print" style="padding:8px 16px;" onclick="downloadMaterialReportPdf()">
+        Download Report PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const JDI_WEBMAIL_CREDENTIALS = {
+    url: "https://www.jaidurgaindustry.com/webmail",
+    user: "Lalit@jaidurgaindustry.com",
+    pass: "Lalit!@#456"
+  };
+
+  // Product Classification by default is "ERW Pipe"
+  let pipeItems = [
+    { id: 1, classification: "ERW Pipe", name: "Frame Down Tube", od: 28.6, thk: 1.2, len: 610, qty: 1500, receivedQty: 0, urgent: true },
+    { id: 2, classification: "ERW Pipe", name: "Seat Tube / Chainstay", od: 25.4, thk: 1.4, len: 520, qty: 2000, receivedQty: 0, urgent: false },
+    { id: 3, classification: "ERW Pipe", name: "Fork Blade Round Tube", od: 31.8, thk: 1.6, len: 400, qty: 1200, receivedQty: 0, urgent: true }
+  ];
+
+  const defaultSuppliers = [
+    { 
+      name: "Apollo Tubes & Pipe Mills Ltd.", 
+      phone: "9876543210", 
+      email: "sales@apollotubes.com", 
+      location: "Mandi Gobindgarh, Punjab", 
+      gstin: "03AAACB1234F1Z5" 
+    },
+    { 
+      name: "Goodluck Steel Tubes Ltd.", 
+      phone: "9814012345", 
+      email: "order@goodlucksteel.com", 
+      location: "Sikandrabad, UP", 
+      gstin: "09AAACG7890L1Z2" 
+    }
+  ];
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('poDate').value = today;
+
+    const due = new Date();
+    due.setDate(due.getDate() + 10);
+    document.getElementById('poDueDate').value = due.toISOString().split('T')[0];
+
+    initSupplierStorage();
+    initPoArchiveStorage();
+    sortPipeItemsInPlace();
+    renderPipeItemControls();
+    updateLivePO();
+    populateInwardPoSelect();
+
+    ['poNumber', 'poDate', 'poDueDate', 'paymentTerms', 'bookingRateKg'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateLivePO);
+    });
+
+    setupEnterKeyNavigation();
+
+    if (window.innerWidth <= 1100) {
+      switchMobileView('form');
+    }
+  });
+
+  function switchMobileView(view) {
+    const sidebar = document.getElementById('sidebarContainer');
+    const preview = document.getElementById('previewContainer');
+    const btnForm = document.getElementById('btnMobileForm');
+    const btnPrev = document.getElementById('btnMobilePreview');
+
+    if (view === 'form') {
+      sidebar.classList.remove('is-hidden-mobile');
+      preview.classList.add('is-hidden-mobile');
+      btnForm.classList.add('active');
+      btnPrev.classList.remove('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      updateLivePO();
+      sidebar.classList.add('is-hidden-mobile');
+      preview.classList.remove('is-hidden-mobile');
+      btnPrev.classList.add('active');
+      btnForm.classList.remove('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function setupEnterKeyNavigation() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const target = e.target;
+        if (!target) return;
+        const tagName = target.tagName.toLowerCase();
+        
+        if (tagName === 'textarea' || tagName === 'button') return;
+
+        if (tagName === 'input' || tagName === 'select') {
+          if (target.dataset && target.dataset.field === 'qty') {
+            e.preventDefault();
+            addNewPipeItem(true);
+            return;
+          }
+
+          e.preventDefault();
+          const focusables = Array.from(
+            document.querySelectorAll('input:not([type="hidden"]):not([disabled]), select:not([disabled])')
+          ).filter(el => el.offsetParent !== null && !el.readOnly);
+
+          const currentIndex = focusables.indexOf(target);
+          if (currentIndex >= 0 && currentIndex < focusables.length - 1) {
+            const nextEl = focusables[currentIndex + 1];
+            nextEl.focus();
+            if (nextEl.select && typeof nextEl.select === 'function' && nextEl.type !== 'date') {
+              nextEl.select();
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function calculateWeight(od, thk, len, qty) {
+    if (!od || !thk || !len || !qty) return 0;
+    return (od - thk) * thk * 0.0246615 * (len / 1000) * qty;
+  }
+
+  function sortPipeItemsInPlace() {
+    pipeItems.sort((a, b) => {
+      if ((a.od || 0) !== (b.od || 0)) return (a.od || 0) - (b.od || 0);
+      if ((a.thk || 0) !== (b.thk || 0)) return (a.thk || 0) - (b.thk || 0);
+      if ((a.len || 0) !== (b.len || 0)) return (a.len || 0) - (b.len || 0);
+      return (a.qty || 0) - (b.qty || 0);
+    });
+  }
+
+  function switchSidebarTab(tab) {
+    const editor = document.getElementById('editorPanel');
+    const inward = document.getElementById('inwardPanel');
+    const list = document.getElementById('savedPoPanel');
+
+    const tabEdit = document.getElementById('tabEditorBtn');
+    const tabInw = document.getElementById('tabInwardBtn');
+    const tabList = document.getElementById('tabListBtn');
+
+    [editor, inward, list].forEach(el => el.style.display = 'none');
+    [tabEdit, tabInw, tabList].forEach(btn => btn.classList.remove('active'));
+
+    if (tab === 'editor') {
+      editor.style.display = 'block';
+      tabEdit.classList.add('active');
+    } else if (tab === 'inward') {
+      inward.style.display = 'block';
+      tabInw.classList.add('active');
+      populateInwardPoSelect();
+    } else {
+      list.style.display = 'block';
+      tabList.classList.add('active');
+      renderSavedPoCards();
+    }
+  }
+
+  function initPoArchiveStorage() {
+    let orders = getSavedOrders();
+    if (orders.length === 0) {
+      saveCurrentPOToSystem(false, false);
+    }
+    updatePoCountBadge();
+  }
+
+  function getSavedOrders() {
+    const orders = JSON.parse(localStorage.getItem('JDI_PO_ARCHIVE_V3') || '[]');
+    orders.sort((a, b) => (b.poNumber || '').localeCompare(a.poNumber || '', undefined, { numeric: true }));
+    return orders;
+  }
+
+  function setSavedOrders(orders) {
+    orders.sort((a, b) => (b.poNumber || '').localeCompare(a.poNumber || '', undefined, { numeric: true }));
+    localStorage.setItem('JDI_PO_ARCHIVE_V3', JSON.stringify(orders));
+    updatePoCountBadge();
+    populateInwardPoSelect();
+  }
+
+  function updatePoCountBadge() {
+    document.getElementById('savedPoCount').textContent = getSavedOrders().length;
+  }
+
+  function getCurrentPoFormData() {
+    sortPipeItemsInPlace();
+    return {
+      poNumber: document.getElementById('poNumber').value.trim(),
+      poDate: document.getElementById('poDate').value,
+      poDueDate: document.getElementById('poDueDate').value,
+      paymentTerms: document.getElementById('paymentTerms').value,
+      bookingRate: parseFloat(document.getElementById('bookingRateKg').value) || 0,
+      suppName: document.getElementById('suppName').value,
+      suppPhone: document.getElementById('suppPhone').value,
+      suppEmail: document.getElementById('suppEmail').value,
+      suppLocation: document.getElementById('suppLocation').value,
+      suppGst: document.getElementById('suppGst').value,
+      pipeItems: JSON.parse(JSON.stringify(pipeItems)),
+      savedAt: new Date().toISOString()
+    };
+  }
+
+  function saveCurrentPOToSystem(showAlert = true, triggerPreviewModal = false) {
+    sortPipeItemsInPlace();
+    renderPipeItemControls();
+    updateLivePO();
+
+    const current = getCurrentPoFormData();
+    let orders = getSavedOrders();
+
+    const existingIdx = orders.findIndex(o => o.poNumber.toLowerCase() === current.poNumber.toLowerCase());
+    if (existingIdx >= 0) {
+      if (orders[existingIdx].pipeItems) {
+        current.pipeItems.forEach(ci => {
+          const match = orders[existingIdx].pipeItems.find(oi => oi.od === ci.od && oi.thk === ci.thk && oi.len === ci.len);
+          if (match && match.receivedQty !== undefined) {
+            ci.receivedQty = match.receivedQty;
+          }
+        });
+      }
+      orders[existingIdx] = current;
+    } else {
+      orders.unshift(current);
+    }
+
+    setSavedOrders(orders);
+
+    if (triggerPreviewModal) {
+      openPdfPreviewModal();
+    } else if (showAlert) {
+      alert(`PO #${current.poNumber} successfully saved!`);
+    }
+  }
+
+  function openPdfPreviewModal() {
+    updateLivePO();
+    const printableSheet = document.getElementById('printablePoSheet');
+    const clone = printableSheet.cloneNode(true);
+    clone.id = 'printablePoSheetModalClone';
+
+    const container = document.getElementById('modalSheetCloneContainer');
+    container.innerHTML = '';
+    container.appendChild(clone);
+
+    document.getElementById('pdfPreviewModal').style.display = 'flex';
+  }
+
+  function closePdfPreviewModal() {
+    document.getElementById('pdfPreviewModal').style.display = 'none';
+  }
+
+  function populateInwardPoSelect() {
+    const select = document.getElementById('inwardPoSelect');
+    if (!select) return;
+    const orders = getSavedOrders();
+    const currentVal = select.value;
+
+    select.innerHTML = '<option value="">-- Choose PO to enter received material (' + orders.length + ') --</option>';
+
+    orders.forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.poNumber;
+      opt.textContent = `${o.poNumber} - ${o.suppName || 'Supplier'} (${o.poDate || ''})`;
+      if (currentVal && currentVal === o.poNumber) {
+        opt.selected = true;
+      }
+      select.appendChild(opt);
+    });
+
+    if (select.value) {
+      onSelectInwardPo();
+    }
+  }
+
+  /* Inward Entry: Supports both pending and excess receiving without limits */
+  function onSelectInwardPo() {
+    const poNum = document.getElementById('inwardPoSelect').value;
+    const cardBox = document.getElementById('inwardPoDetailsCard');
+    const itemsContainer = document.getElementById('inwardItemsContainer');
+
+    if (!poNum) {
+      cardBox.style.display = 'none';
+      itemsContainer.innerHTML = '<div style="text-align:center; padding:30px; font-size:0.8rem; color:#94a3b8;">Kripya upar se PO number select karein.</div>';
+      return;
+    }
+
+    const orders = getSavedOrders();
+    const order = orders.find(o => o.poNumber === poNum);
+    if (!order) return;
+
+    cardBox.style.display = 'block';
+    document.getElementById('inwardCardPoNo').textContent = order.poNumber;
+    document.getElementById('inwardCardDate').textContent = 'PO Date: ' + (order.poDate || '-');
+    document.getElementById('inwardCardSupplier').textContent = 'Vendor: ' + (order.suppName || '-') + ' | ' + (order.suppLocation || '');
+
+    let totalOrdered = 0;
+    let totalReceived = 0;
+    let totalPending = 0;
+    let totalExcess = 0;
+
+    itemsContainer.innerHTML = '';
+
+    (order.pipeItems || []).forEach((it, idx) => {
+      const oQty = Number(it.qty) || 0;
+      const rQty = Number(it.receivedQty) || 0;
+      const diff = oQty - rQty;
+      const pQty = diff > 0 ? diff : 0;
+      const eQty = diff < 0 ? Math.abs(diff) : 0;
+
+      totalOrdered += oQty;
+      totalReceived += rQty;
+      totalPending += pQty;
+      totalExcess += eQty;
+
+      let badgeHtml = '';
+      if (eQty > 0) {
+        badgeHtml = `<span class="report-badge badge-excess">+ Excess (${eQty} Pcs)</span>`;
+      } else if (pQty === 0) {
+        badgeHtml = `<span class="report-badge badge-full">Completed</span>`;
+      } else if (rQty > 0) {
+        badgeHtml = `<span class="report-badge badge-partial">Partial</span>`;
+      } else {
+        badgeHtml = `<span class="report-badge badge-pending">Pending</span>`;
+      }
+
+      const card = document.createElement('div');
+      card.style.cssText = "background:#ffffff; border:1.5px solid #e2e8f0; border-radius:10px; padding:10px; box-shadow:0 2px 4px rgba(0,0,0,0.03);";
+
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <div>
+            <strong style="font-size:0.77rem; color:#07192f;">#${idx + 1}: [${it.classification || 'ERW Pipe'}] ${it.name || 'Pipe Item'}</strong>
+            <div style="font-size:0.71rem; color:#0284c7; font-weight:800;" class="font-mono-bold">
+              OD: ${it.od} mm &bull; Thk: ${it.thk} mm &bull; Length: ${it.len} mm
+            </div>
+          </div>
+          ${badgeHtml}
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1.2fr 1.2fr; gap:8px; align-items:flex-end;">
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#64748b;">Ordered</label>
+            <input type="text" class="form-control font-mono-bold" value="${oQty.toLocaleString()} Pcs" readonly style="background:#f1f5f9; text-align:center;">
+          </div>
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#166534;">Received (No Limit)</label>
+            <input type="number" min="0" class="form-control font-mono-bold nav-enter" style="border-color:#86efac; text-align:center; color:#15803d; font-weight:800;"
+                   value="${rQty}" onchange="updateInwardItemQty('${order.poNumber}', ${idx}, this.value)">
+          </div>
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:${eQty > 0 ? '#6d28d9' : (pQty > 0 ? '#b91c1c' : '#15803d')};">
+              ${eQty > 0 ? 'Excess Received' : 'Balance Pending'}
+            </label>
+            <input type="text" class="form-control font-mono-bold" 
+                   value="${eQty > 0 ? '+ ' + eQty.toLocaleString() + ' Pcs' : pQty.toLocaleString() + ' Pcs'}" readonly 
+                   style="background:${eQty > 0 ? '#f5f3ff' : (pQty > 0 ? '#fff1f2' : '#f0fdf4')}; color:${eQty > 0 ? '#6d28d9' : (pQty > 0 ? '#b91c1c' : '#15803d')}; text-align:center; font-weight:800;">
+          </div>
+        </div>
+      `;
+      itemsContainer.appendChild(card);
+    });
+
+    document.getElementById('inwardTotalOrderedPcs').textContent = totalOrdered.toLocaleString() + ' Pcs';
+    document.getElementById('inwardTotalReceivedPcs').textContent = totalReceived.toLocaleString() + ' Pcs';
+    
+    if (totalExcess > 0) {
+      document.getElementById('inwardTotalPendingPcs').innerHTML = `${totalPending.toLocaleString()} Pend <span style="color:#6d28d9;">(+${totalExcess} Ex)</span>`;
+    } else {
+      document.getElementById('inwardTotalPendingPcs').textContent = totalPending.toLocaleString() + ' Pcs';
+    }
+  }
+
+  function updateInwardItemQty(poNum, itemIdx, newQty) {
+    let orders = getSavedOrders();
+    const order = orders.find(o => o.poNumber === poNum);
+    if (!order || !order.pipeItems || !order.pipeItems[itemIdx]) return;
+
+    order.pipeItems[itemIdx].receivedQty = Math.max(0, parseInt(newQty) || 0);
+    setSavedOrders(orders);
+    onSelectInwardPo();
+
+    if (document.getElementById('poNumber').value === poNum) {
+      if (pipeItems[itemIdx]) {
+        pipeItems[itemIdx].receivedQty = order.pipeItems[itemIdx].receivedQty;
+      }
+      updateLivePO();
+    }
+  }
+
+  /* Material Balance Report: Highlights excess receiving in table and separate section */
+  function generateAndOpenPoReport(targetPoNum = null) {
+    const poNum = targetPoNum || document.getElementById('inwardPoSelect').value || document.getElementById('poNumber').value;
+    const orders = getSavedOrders();
+    const order = orders.find(o => o.poNumber === poNum);
+
+    if (!order) {
+      alert("Pehle valid PO select karein jiska report dekhna chahte hain.");
+      return;
+    }
+
+    const todayStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    document.getElementById('repReportGenDate').textContent = 'Generated: ' + todayStr;
+    document.getElementById('repPoNumber').textContent = order.poNumber;
+    document.getElementById('repSupplierName').textContent = (order.suppName || '-') + ' (' + (order.suppLocation || '') + ')';
+    document.getElementById('repPoDate').textContent = order.poDate || '-';
+    
+    const rate = order.bookingRate || 0;
+    document.getElementById('repBookingRate').textContent = `₹ ${rate.toFixed(2)} / Kg`;
+
+    let totalOrderedPcs = 0;
+    let totalOrderedWt = 0;
+    let totalRecvPcs = 0;
+    let totalRecvWt = 0;
+    let totalPendPcs = 0;
+    let totalPendWt = 0;
+    let totalExcessPcs = 0;
+    let totalExcessWt = 0;
+
+    const breakdownTbody = document.getElementById('repBreakdownTableBody');
+    const recvListBody = document.getElementById('repReceivedListBody');
+    const pendListBody = document.getElementById('repPendingListBody');
+    const excessListBody = document.getElementById('repExcessListBody');
+    const excessBoxContainer = document.getElementById('repExcessBoxContainer');
+
+    breakdownTbody.innerHTML = '';
+    recvListBody.innerHTML = '';
+    pendListBody.innerHTML = '';
+    excessListBody.innerHTML = '';
+
+    (order.pipeItems || []).forEach((it, idx) => {
+      const oQty = Number(it.qty) || 0;
+      const rQty = Number(it.receivedQty) || 0;
+      const diff = oQty - rQty;
+      const pQty = diff > 0 ? diff : 0;
+      const eQty = diff < 0 ? Math.abs(diff) : 0;
+
+      const unitWeight = calculateWeight(it.od, it.thk, it.len, 1);
+      const oWt = unitWeight * oQty;
+      const rWt = unitWeight * rQty;
+      const pWt = unitWeight * pQty;
+      const eWt = unitWeight * eQty;
+
+      totalOrderedPcs += oQty;
+      totalOrderedWt += oWt;
+      totalRecvPcs += rQty;
+      totalRecvWt += rWt;
+      totalPendPcs += pQty;
+      totalPendWt += pWt;
+      totalExcessPcs += eQty;
+      totalExcessWt += eWt;
+
+      let statusTag = '';
+      if (eQty > 0) {
+        statusTag = `<span class="report-badge badge-excess">+ Excess (${eQty})</span>`;
+      } else if (pQty === 0) {
+        statusTag = `<span class="report-badge badge-full">Complete</span>`;
+      } else if (rQty > 0) {
+        statusTag = `<span class="report-badge badge-partial">Partial</span>`;
+      } else {
+        statusTag = `<span class="report-badge badge-pending">Pending</span>`;
+      }
+
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = "1px solid #cbd5e1";
+      if (eQty > 0) tr.style.background = "#faf5ff";
+
+      tr.innerHTML = `
+        <td style="padding:6px 4px; text-align:center; font-weight:700;">${idx + 1}</td>
+        <td style="padding:6px; font-weight:700; color:#07192f;">[${it.classification || 'ERW Pipe'}] ${it.name || 'Tube'}</td>
+        <td style="padding:6px 4px; text-align:center;" class="font-mono-bold">${it.od}</td>
+        <td style="padding:6px 4px; text-align:center;" class="font-mono-bold">${it.thk}</td>
+        <td style="padding:6px 4px; text-align:center;" class="font-mono-bold">${it.len}</td>
+        <td style="padding:6px 4px; text-align:right; font-weight:800;" class="font-mono-bold">${oQty.toLocaleString()}</td>
+        <td style="padding:6px 4px; text-align:right; font-weight:800; color:#166534;" class="font-mono-bold">${rQty.toLocaleString()}</td>
+        <td style="padding:6px 4px; text-align:right; font-weight:800; color:#b91c1c;" class="font-mono-bold">${pQty > 0 ? pQty.toLocaleString() : '-'}</td>
+        <td style="padding:6px 4px; text-align:right; font-weight:800; color:#6d28d9;" class="font-mono-bold">${eQty > 0 ? '+' + eQty.toLocaleString() : '-'}</td>
+        <td style="padding:6px 4px; text-align:center;">${statusTag}</td>
+      `;
+      breakdownTbody.appendChild(tr);
+
+      // Received items table
+      if (rQty > 0) {
+        const rtr = document.createElement('tr');
+        rtr.style.borderBottom = "1px solid #dcfce7";
+        rtr.innerHTML = `
+          <td style="padding:4px 2px; font-weight:700; color:#166534;">&Oslash;${it.od} &times; ${it.thk} &times; ${it.len} mm ${eQty > 0 ? ' <small style="color:#6d28d9;">(Incl. Excess)</small>' : ''}</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:800;" class="font-mono-bold">${rQty.toLocaleString()}</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:800;" class="font-mono-bold">${rWt.toFixed(2)}</td>
+        `;
+        recvListBody.appendChild(rtr);
+      }
+
+      // Pending shortage table
+      if (pQty > 0) {
+        const ptr = document.createElement('tr');
+        ptr.style.borderBottom = "1px solid #fee2e2";
+        ptr.innerHTML = `
+          <td style="padding:4px 2px; font-weight:700; color:#be123c;">&Oslash;${it.od} &times; ${it.thk} &times; ${it.len} mm</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:800;" class="font-mono-bold">${pQty.toLocaleString()}</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:800;" class="font-mono-bold">${pWt.toFixed(2)}</td>
+        `;
+        pendListBody.appendChild(ptr);
+      }
+
+      // Excess table entries
+      if (eQty > 0) {
+        const etr = document.createElement('tr');
+        etr.style.borderBottom = "1px solid #ede9fe";
+        etr.innerHTML = `
+          <td style="padding:4px 2px; font-weight:700; color:#6d28d9;">&Oslash;${it.od} &times; ${it.thk} &times; ${it.len} mm (${it.name || 'Tube'})</td>
+          <td style="padding:4px 2px; text-align:right;" class="font-mono-bold">${oQty.toLocaleString()}</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:800; color:#166534;" class="font-mono-bold">${rQty.toLocaleString()}</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:900; color:#6d28d9;" class="font-mono-bold">+${eQty.toLocaleString()}</td>
+          <td style="padding:4px 2px; text-align:right; font-weight:900; color:#6d28d9;" class="font-mono-bold">+${eWt.toFixed(2)}</td>
+        `;
+        excessListBody.appendChild(etr);
+      }
+    });
+
+    if (totalExcessPcs > 0) {
+      excessBoxContainer.style.display = 'block';
+    } else {
+      excessBoxContainer.style.display = 'none';
+    }
+
+    document.getElementById('repCardOrdered').textContent = totalOrderedPcs.toLocaleString() + ' Pcs';
+    document.getElementById('repCardOrderedWt').textContent = totalOrderedWt.toFixed(2) + ' Kg';
+    document.getElementById('repCardReceived').textContent = totalRecvPcs.toLocaleString() + ' Pcs';
+    document.getElementById('repCardReceivedWt').textContent = totalRecvWt.toFixed(2) + ' Kg';
+    document.getElementById('repCardPending').textContent = totalPendPcs.toLocaleString() + ' Pcs';
+    document.getElementById('repCardPendingWt').textContent = totalPendWt.toFixed(2) + ' Kg';
+    document.getElementById('repCardExcess').textContent = '+' + totalExcessPcs.toLocaleString() + ' Pcs';
+    document.getElementById('repCardExcessWt').textContent = '+' + totalExcessWt.toFixed(2) + ' Kg';
+
+    document.getElementById('poReportModal').style.display = 'flex';
+  }
+
+  function closePoReportModal() {
+    document.getElementById('poReportModal').style.display = 'none';
+  }
+
+  async function downloadMaterialReportPdf() {
+    const element = document.getElementById('printableReportSheet');
+    const poNum = document.getElementById('repPoNumber').textContent || 'PO';
+    const cleanPo = poNum.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const opt = {
+      margin: [6, 6, 6, 6],
+      filename: `Material_Report_${cleanPo}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2.2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    return await html2pdf().set(opt).from(element).save();
+  }
+
+  function renderSavedPoCards(filterText = "") {
+    const container = document.getElementById('savedPoContainer');
+    container.innerHTML = '';
+    const orders = getSavedOrders();
+
+    const filtered = orders.filter(o => {
+      const q = filterText.toLowerCase();
+      return (o.poNumber && o.poNumber.toLowerCase().includes(q)) || 
+             (o.suppName && o.suppName.toLowerCase().includes(q));
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding:30px; font-size:0.8rem; color:#94a3b8;">No matching purchase orders found.</div>';
+      return;
+    }
+
+    filtered.forEach((order) => {
+      let totalPcs = 0;
+      let totalReceived = 0;
+      let totalBalance = 0;
+      let totalExcess = 0;
+      let totalWt = 0;
+      const rate = order.bookingRate || 0;
+
+      (order.pipeItems || []).forEach(it => {
+        const qty = Number(it.qty) || 0;
+        const rec = Number(it.receivedQty) || 0;
+        const diff = qty - rec;
+        if (diff > 0) totalBalance += diff;
+        if (diff < 0) totalExcess += Math.abs(diff);
+
+        totalPcs += qty;
+        totalReceived += rec;
+        totalWt += calculateWeight(it.od, it.thk, it.len, it.qty);
+      });
+
+      const gross = totalWt * rate;
+      const net = gross * 1.18;
+
+      const card = document.createElement('div');
+      card.className = 'po-history-card';
+
+      card.innerHTML = `
+        <div class="po-card-top">
+          <span class="po-card-num font-mono-bold">${order.poNumber}</span>
+          <span class="po-card-date">${order.poDate || ''}</span>
+        </div>
+        <div class="po-card-supp">${order.suppName || 'No Supplier'}</div>
+        <div class="po-card-summary">
+          <span>${order.pipeItems ? order.pipeItems.length : 0} Lines &bull; Rate: <strong>₹${rate}/Kg</strong></span>
+          <span style="font-weight:800; color:#07192f;">Net: ₹${Math.round(net).toLocaleString('en-IN')}</span>
+        </div>
+        <div style="font-size:0.71rem; display:flex; justify-content:space-between; margin-bottom:8px; padding:6px 8px; background:#f0fdf4; border-radius:6px; border:1px solid #bbf7d0;">
+          <span>Order: <strong>${totalPcs.toLocaleString()}</strong></span>
+          <span>Recv: <strong style="color:#0369a1;">${totalReceived.toLocaleString()}</strong></span>
+          <span>${totalExcess > 0 ? `<strong style="color:#6d28d9;">+${totalExcess} Ex</strong>` : `<strong style="color:#b91c1c;">${totalBalance} Pend</strong>`}</span>
+        </div>
+
+        <div class="po-card-btns">
+          <button class="btn-po-action btn-po-review" onclick="reviewSavedPoInPreview('${order.poNumber}')">&#128065; Review</button>
+          <button class="btn-po-action btn-po-load" onclick="loadSavedPoForEdit('${order.poNumber}')">&#9998; Edit</button>
+          <button class="btn-po-action btn-po-clone" onclick="clonePoForNew('${order.poNumber}')">&#128203; Copy</button>
+          <button class="btn-po-action btn-po-del" onclick="deleteSavedPo('${order.poNumber}')">&#128465; Del</button>
+        </div>
+
+        <button type="button" class="btn-report-action" onclick="generateAndOpenPoReport('${order.poNumber}')">
+          📊 Received vs Pending & Excess PDF Report
+        </button>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function filterSavedPoList() {
+    const text = document.getElementById('poSearchInput').value;
+    renderSavedPoCards(text);
+  }
+
+  function reviewSavedPoInPreview(poNum) {
+    loadSavedPoForEdit(poNum, false);
+    if (window.innerWidth <= 1100) {
+      switchMobileView('preview');
+    } else {
+      document.getElementById('printablePoSheet').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function loadSavedPoForEdit(poNum, switchTabToEditor = true) {
+    const orders = getSavedOrders();
+    const target = orders.find(o => o.poNumber === poNum);
+    if (!target) return;
+
+    document.getElementById('poNumber').value = target.poNumber;
+    document.getElementById('poDate').value = target.poDate;
+    document.getElementById('poDueDate').value = target.poDueDate;
+    document.getElementById('paymentTerms').value = target.paymentTerms || "30 Days Against Delivery";
+    document.getElementById('bookingRateKg').value = target.bookingRate !== undefined ? target.bookingRate : 68.5;
+    document.getElementById('suppName').value = target.suppName || "";
+    document.getElementById('suppPhone').value = target.suppPhone || "";
+    document.getElementById('suppEmail').value = target.suppEmail || "";
+    document.getElementById('suppLocation').value = target.suppLocation || "";
+    document.getElementById('suppGst').value = target.suppGst || "";
+
+    pipeItems = JSON.parse(JSON.stringify(target.pipeItems || [])).map(it => ({
+      ...it,
+      classification: it.classification || "ERW Pipe"
+    }));
+    sortPipeItemsInPlace();
+
+    renderPipeItemControls();
+    updateLivePO();
+
+    if (switchTabToEditor) {
+      switchSidebarTab('editor');
+      if (window.innerWidth <= 1100) switchMobileView('form');
+    }
+  }
+
+  function clonePoForNew(poNum) {
+    loadSavedPoForEdit(poNum, true);
+    document.getElementById('poDate').value = new Date().toISOString().split('T')[0];
+    assignNextSequentialPoNo();
+    alert(`PO data copied! New sequential PO Number: ${document.getElementById('poNumber').value}`);
+  }
+
+  function deleteSavedPo(poNum) {
+    if (!confirm(`Are you sure you want to delete PO: ${poNum}?`)) return;
+    let orders = getSavedOrders();
+    orders = orders.filter(o => o.poNumber !== poNum);
+    setSavedOrders(orders);
+    renderSavedPoCards(document.getElementById('poSearchInput').value);
+  }
+
+  function assignNextSequentialPoNo() {
+    const orders = getSavedOrders();
+    const prefix = "JDI-PO-";
+    let maxNum = 0;
+
+    orders.forEach(o => {
+      if (o.poNumber && o.poNumber.startsWith(prefix)) {
+        const numPart = parseInt(o.poNumber.replace(prefix, ''), 10);
+        if (!isNaN(numPart) && numPart > maxNum) {
+          maxNum = numPart;
+        }
+      }
+    });
+
+    const currentFieldVal = document.getElementById('poNumber').value.trim();
+    if (currentFieldVal.startsWith(prefix)) {
+      const curNum = parseInt(currentFieldVal.replace(prefix, ''), 10);
+      if (!isNaN(curNum) && curNum > maxNum) {
+        maxNum = curNum;
+      }
+    }
+
+    const nextNum = Math.max(1, maxNum + 1);
+    document.getElementById('poNumber').value = `${prefix}${String(nextNum).padStart(3, '0')}`;
+    updateLivePO();
+  }
+
+  function initSupplierStorage() {
+    let saved = localStorage.getItem('JDI_SUPPLIERS_V2');
+    if (!saved) {
+      localStorage.setItem('JDI_SUPPLIERS_V2', JSON.stringify(defaultSuppliers));
+    }
+    refreshSupplierDropdown();
+  }
+
+  function getSuppliersList() {
+    return JSON.parse(localStorage.getItem('JDI_SUPPLIERS_V2') || '[]');
+  }
+
+  function setSuppliersList(list) {
+    localStorage.setItem('JDI_SUPPLIERS_V2', JSON.stringify(list));
+  }
+
+  function refreshSupplierDropdown(selectedName = "") {
+    const list = getSuppliersList();
+    const select = document.getElementById('supplierDirectorySelect');
+    select.innerHTML = '<option value="">-- Choose From Saved Suppliers (' + list.length + ') --</option>';
+
+    list.forEach((s, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${s.name} (${s.phone || 'No Mobile'})`;
+      if (selectedName && s.name.toLowerCase() === selectedName.toLowerCase()) {
+        opt.selected = true;
+      }
+      select.appendChild(opt);
+    });
+  }
+
+  function onSelectSavedSupplier() {
+    const select = document.getElementById('supplierDirectorySelect');
+    const list = getSuppliersList();
+    const idx = select.value;
+
+    if (idx !== "") {
+      const s = list[idx];
+      document.getElementById('suppName').value = s.name || "";
+      document.getElementById('suppPhone').value = s.phone || "";
+      document.getElementById('suppEmail').value = s.email || "";
+      document.getElementById('suppLocation').value = s.location || "";
+      document.getElementById('suppGst').value = s.gstin || "";
+      updateLivePO();
+    }
+  }
+
+  function saveOrUpdateSupplier() {
+    const name = document.getElementById('suppName').value.trim();
+    const phone = document.getElementById('suppPhone').value.trim();
+    const email = document.getElementById('suppEmail').value.trim();
+    const loc = document.getElementById('suppLocation').value.trim();
+    const gst = document.getElementById('suppGst').value.trim();
+
+    if (!name) return alert("Supplier name enter karein.");
+
+    let list = getSuppliersList();
+    const select = document.getElementById('supplierDirectorySelect');
+    const idx = select.value !== "" ? parseInt(select.value) : -1;
+
+    const supplierData = { name, phone, email, location: loc, gstin: gst };
+
+    if (idx >= 0 && idx < list.length) {
+      list[idx] = supplierData;
+    } else {
+      list.unshift(supplierData);
+    }
+
+    setSuppliersList(list);
+    refreshSupplierDropdown(name);
+    alert(`Supplier "${name}" saved!`);
+  }
+
+  function deleteSelectedSupplier() {
+    const select = document.getElementById('supplierDirectorySelect');
+    const idx = select.value;
+    let list = getSuppliersList();
+
+    if (idx === "") return alert("Pehle delete karne ke liye supplier select karein.");
+    if (confirm(`Supplier "${list[idx].name}" ko delete karna chahte hain?`)) {
+      list.splice(idx, 1);
+      setSuppliersList(list);
+      clearSupplierFields();
+      refreshSupplierDropdown();
+    }
+  }
+
+  function clearSupplierFields() {
+    document.getElementById('supplierDirectorySelect').value = "";
+    document.getElementById('suppName').value = "";
+    document.getElementById('suppPhone').value = "";
+    document.getElementById('suppEmail').value = "";
+    document.getElementById('suppLocation').value = "";
+    document.getElementById('suppGst').value = "";
+    updateLivePO();
+  }
+
+  async function downloadOfficialPdf() {
+    const element = document.getElementById('printablePoSheet');
+    const poNum = document.getElementById('poNumber').value || 'PO';
+    const cleanPo = poNum.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const opt = {
+      margin: [4, 4, 4, 4],
+      filename: `PO_${cleanPo}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2.2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    return await html2pdf().set(opt).from(element).save();
+  }
+
+  async function dispatchViaEmail(portal) {
+    const poNum = document.getElementById('poNumber').value.trim();
+    const suppName = document.getElementById('suppName').value.trim();
+    const suppEmail = document.getElementById('suppEmail').value.trim();
+
+    if (!suppEmail) {
+      alert("Supplier Email ID enter karein.");
+      document.getElementById('suppEmail').focus();
+      return;
+    }
+
+    const subject = `Official Purchase Order: ${poNum} - Jai Durga Industry`;
+    const body = `Dear ${suppName},%0D%0A%0D%0APlease find attached our Official Purchase Order (${poNum}).%0D%0A%0D%0AKindly confirm dispatch schedule.%0D%0A%0D%0ARegards,%0D%0AJai Durga Industry`;
+
+    await downloadOfficialPdf();
+
+    setTimeout(() => {
+      let targetUrl = "";
+      if (portal === 'jdi_webmail') {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(JDI_WEBMAIL_CREDENTIALS.pass);
+        }
+        window.open(JDI_WEBMAIL_CREDENTIALS.url, '_blank');
+      } else if (portal === 'gmail') {
+        targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(suppEmail)}&su=${encodeURIComponent(subject)}&body=${body}`;
+        window.open(targetUrl, '_blank');
+      } else if (portal === 'yahoo') {
+        targetUrl = `https://compose.mail.yahoo.com/?to=${encodeURIComponent(suppEmail)}&subj=${encodeURIComponent(subject)}&body=${body}`;
+        window.open(targetUrl, '_blank');
+      } else {
+        targetUrl = `mailto:${suppEmail}?subject=${encodeURIComponent(subject)}&body=${body}`;
+        window.location.href = targetUrl;
+      }
+    }, 600);
+  }
+
+  async function shareToWhatsAppWithPdfDownload() {
+    const poNum = document.getElementById('poNumber').value.trim();
+    const suppName = document.getElementById('suppName').value.trim();
+    const rawDigits = document.getElementById('suppPhone').value.replace(/\D/g, '');
+
+    if (!rawDigits) {
+      alert("Kripya supplier ka mobile number enter karein.");
+      document.getElementById('suppPhone').focus();
+      return;
+    }
+
+    let targetPhone = rawDigits.length === 10 ? "91" + rawDigits : rawDigits;
+    await downloadOfficialPdf();
+
+    const fileName = `PO_${poNum.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
+    const msg = encodeURIComponent(
+      `*JAI DURGA INDUSTRY - PURCHASE ORDER*\n` +
+      `PO No: *${poNum}*\n` +
+      `Supplier: *${suppName}*\n\n` +
+      `PO PDF file (${fileName}) download ho gayi hai. Dispatch schedule confirm karein.`
+    );
+
+    setTimeout(() => {
+      window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank');
+    }, 600);
+  }
+
+  function updateLivePO() {
+    document.getElementById('prevSuppName').textContent = document.getElementById('suppName').value || '-';
+    document.getElementById('prevSuppPhone').textContent = document.getElementById('suppPhone').value || '-';
+    document.getElementById('prevSuppEmail').textContent = document.getElementById('suppEmail').value || '-';
+    
+    const loc = document.getElementById('suppLocation').value || '';
+    const gst = document.getElementById('suppGst').value || '';
+    document.getElementById('prevSuppLocGst').textContent = `${loc} | GST: ${gst}`;
+
+    document.getElementById('prevPoNumber').textContent = document.getElementById('poNumber').value || '-';
+    document.getElementById('prevPoDate').textContent = document.getElementById('poDate').value || '-';
+    document.getElementById('prevPoDueDate').textContent = document.getElementById('poDueDate').value || '-';
+    document.getElementById('prevPaymentTerms').textContent = document.getElementById('paymentTerms').value || '-';
+
+    const bookingRate = parseFloat(document.getElementById('bookingRateKg').value) || 0;
+    document.getElementById('prevBookingRateDisplay').textContent = `₹ ${bookingRate.toFixed(2)} / Kg`;
+
+    sortPipeItemsInPlace();
+
+    const tbody = document.getElementById('previewTableBody');
+    tbody.innerHTML = '';
+
+    let totalPcs = 0;
+    let totalWeight = 0;
+
+    pipeItems.forEach((it, idx) => {
+      const wt = calculateWeight(it.od, it.thk, it.len, it.qty);
+      const itemAmount = wt * bookingRate;
+
+      totalPcs += Number(it.qty) || 0;
+      totalWeight += wt;
+
+      const tr = document.createElement('tr');
+      if (it.urgent) tr.className = 'is-urgent-row';
+
+      tr.innerHTML = `
+        <td style="text-align:center; font-weight:800;">${idx + 1}</td>
+        <td>
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+            <span style="background:#e0f2fe; color:#0369a1; font-size:0.65rem; font-weight:800; padding:1px 6px; border-radius:4px; border:1px solid #bae6fd;">
+              ${it.classification || 'ERW Pipe'}
+            </span>
+            <span style="font-weight:800; color:#07192f;">${it.name || 'Steel Pipe'}</span>
+          </div>
+          <div style="font-size:0.71rem; color:#475569;" class="font-mono-bold">&Oslash;${it.od}mm &times; ${it.thk}mm &times; ${it.len}mm</div>
+        </td>
+        <td style="text-align:center;" class="font-mono-bold">${it.od}</td>
+        <td style="text-align:center;" class="font-mono-bold">${it.thk}</td>
+        <td style="text-align:center;" class="font-mono-bold">${it.len}</td>
+        <td style="text-align:right;" class="font-mono-bold">${(it.qty || 0).toLocaleString()}</td>
+        <td style="text-align:right;" class="font-mono-bold">${wt.toFixed(2)}</td>
+        <td style="text-align:right;" class="font-mono-bold">₹ ${itemAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td style="text-align:center; font-weight:800; font-size:0.68rem; color:${it.urgent ? '#e11d48' : '#64748b'}">
+          ${it.urgent ? 'URGENT' : 'Regular'}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const grossAmount = totalWeight * bookingRate;
+    const cgstAmount = grossAmount * 0.09;
+    const sgstAmount = grossAmount * 0.09;
+    const totalGstAmount = cgstAmount + sgstAmount;
+    const netAmount = grossAmount + totalGstAmount;
+
+    document.getElementById('prevTotalPcs').textContent = totalPcs.toLocaleString() + ' Pcs';
+    document.getElementById('prevTotalWeight').textContent = totalWeight.toFixed(2) + ' Kg';
+    document.getElementById('prevGrossAmount').textContent = '₹ ' + grossAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('prevCgstAmount').textContent = '₹ ' + cgstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('prevSgstAmount').textContent = '₹ ' + sgstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('prevTotalGstAmount').textContent = '₹ ' + totalGstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('prevNetAmount').textContent = '₹ ' + netAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function renderPipeItemControls() {
+    const container = document.getElementById('pipeItemsList');
+    container.innerHTML = '';
+
+    pipeItems.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = `pipe-item-builder ${item.urgent ? 'is-urgent' : ''}`;
+      card.id = `builder_card_${item.id}`;
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items:center;">
+          <span style="font-size:0.75rem; font-weight:800; color:#07192f;">#${index + 1}: Specification</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <label class="urgent-toggle-switch">
+              <input type="checkbox" ${item.urgent ? 'checked' : ''} onchange="toggleUrgentItem(${item.id})"> URGENT
+            </label>
+            ${pipeItems.length > 1 ? `<button type="button" class="btn-del-item" onclick="removePipeItem(${item.id})">&times;</button>` : ''}
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:8px;">
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#475569;">Product Classification</label>
+            <select class="form-control nav-enter" style="font-weight:700; color:#0369a1;" onchange="updateItemProperty(${item.id}, 'classification', this.value)">
+              <option value="ERW Pipe" ${item.classification === 'ERW Pipe' ? 'selected' : ''}>ERW Pipe (Default)</option>
+              <option value="CR Pipe" ${item.classification === 'CR Pipe' ? 'selected' : ''}>CR Pipe</option>
+              <option value="HR Pipe" ${item.classification === 'HR Pipe' ? 'selected' : ''}>HR Pipe</option>
+              <option value="Seamless Tube" ${item.classification === 'Seamless Tube' ? 'selected' : ''}>Seamless Tube</option>
+              <option value="Oval Tube" ${item.classification === 'Oval Tube' ? 'selected' : ''}>Oval Tube</option>
+              <option value="Custom Spec" ${item.classification === 'Custom Spec' ? 'selected' : ''}>Custom Spec</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#475569;">Description / Part Name</label>
+            <input type="text" id="desc_input_${item.id}" class="form-control nav-enter" value="${item.name}" placeholder="e.g. Frame Down Tube" oninput="updateItemProperty(${item.id}, 'name', this.value)">
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#475569;">OD (mm)</label>
+            <input type="number" step="0.1" class="form-control nav-enter" value="${item.od}" oninput="updateItemProperty(${item.id}, 'od', parseFloat(this.value)||0)">
+          </div>
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#475569;">Thk (mm)</label>
+            <input type="number" step="0.05" class="form-control nav-enter" value="${item.thk}" oninput="updateItemProperty(${item.id}, 'thk', parseFloat(this.value)||0)">
+          </div>
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#475569;">Len (mm)</label>
+            <input type="number" class="form-control nav-enter" value="${item.len}" oninput="updateItemProperty(${item.id}, 'len', parseFloat(this.value)||0)">
+          </div>
+          <div>
+            <label style="font-size:0.68rem; font-weight:700; color:#475569;">Qty (Pcs) <span style="color:#0284c7;">[Enter &crarr;]</span></label>
+            <input type="number" class="form-control nav-enter" data-field="qty" value="${item.qty}" oninput="updateItemProperty(${item.id}, 'qty', parseInt(this.value)||0)">
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function addNewPipeItem(autoFocusNew = false) {
+    const newId = Date.now();
+    const newItem = { 
+      id: newId, 
+      classification: "ERW Pipe", 
+      name: "Frame Tube", 
+      od: 25.4, 
+      thk: 1.2, 
+      len: 610, 
+      qty: 1000, 
+      receivedQty: 0, 
+      urgent: false 
+    };
+
+    pipeItems.push(newItem);
+    renderPipeItemControls();
+    updateLivePO();
+
+    if (autoFocusNew) {
+      setTimeout(() => {
+        const newDescInput = document.getElementById(`desc_input_${newId}`);
+        if (newDescInput) {
+          newDescInput.focus();
+          newDescInput.select();
+        }
+      }, 50);
+    }
+  }
+
+  function removePipeItem(id) {
+    if (pipeItems.length <= 1) return;
+    pipeItems = pipeItems.filter(it => it.id !== id);
+    renderPipeItemControls();
+    updateLivePO();
+  }
+
+  function toggleUrgentItem(id) {
+    const it = pipeItems.find(x => x.id === id);
+    if (it) { it.urgent = !it.urgent; renderPipeItemControls(); updateLivePO(); }
+  }
+
+  function updateItemProperty(id, prop, val) {
+    const it = pipeItems.find(x => x.id === id);
+    if (it) { it[prop] = val; updateLivePO(); }
+  }
+</script>
+</body>
+</html>
